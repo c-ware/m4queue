@@ -1,0 +1,376 @@
+/*
+ * Test of the dequeue operation
+*/
+
+#include "common.h"
+
+include(template/common.m4)
+
+void test_dequeue() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+    ASSERT_NUMEQ(my_queue->length, 3);
+    ASSERT_NUMEQ(my_queue->head, 1);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(output, "foo");
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+    ASSERT_STREQ(my_queue->contents[1], "bar");
+    ASSERT_STREQ(my_queue->contents[2], "baz");
+    ASSERT_STREQ(my_queue->contents[3], "tuna");
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+    ASSERT_NUMEQ(my_queue->length, 2);
+    ASSERT_NUMEQ(my_queue->head, 2);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(output, "bar");
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+    ASSERT_STREQ(my_queue->contents[1], "bar");
+    ASSERT_STREQ(my_queue->contents[2], "baz");
+    ASSERT_STREQ(my_queue->contents[3], "tuna");
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+    ASSERT_NUMEQ(my_queue->length, 1);
+    ASSERT_NUMEQ(my_queue->head, 3);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(output, "baz");
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+    ASSERT_STREQ(my_queue->contents[1], "bar");
+    ASSERT_STREQ(my_queue->contents[2], "baz");
+    ASSERT_STREQ(my_queue->contents[3], "tuna");
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+    ASSERT_NUMEQ(my_queue->length, 0);
+    ASSERT_NUMEQ(my_queue->head, 4);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(output, "tuna");
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+/* Verify that the queue correctly resets when
+ * enqueing after data has been dequeued. */
+void test_dequeue_enqueue_reset() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+
+    /* This should "reset" the state of the queue to be arranged
+     * as if the queue was not dequeued from at all. */
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    ASSERT_NUMEQ(my_queue->length, 4);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(my_queue->contents[0], "bar");
+    ASSERT_STREQ(my_queue->contents[1], "baz");
+    ASSERT_STREQ(my_queue->contents[2], "tuna");
+    ASSERT_STREQ(my_queue->contents[3], "foo");
+
+    /* Does it happen when two elements are enqueued? */
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_DEQUEUE);
+
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    ASSERT_NUMEQ(my_queue->length, 3);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(my_queue->contents[0], "tuna");
+    ASSERT_STREQ(my_queue->contents[1], "foo");
+    ASSERT_STREQ(my_queue->contents[2], "bar");
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+/* These tests verify that dequeing leads to a freeable
+ * queue from a variety of the lengths (*\d+$ is the
+ * number of dequeued items)  */
+void test_dequeue_freeable_1() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+void test_dequeue_freeable_2() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+void test_dequeue_freeable_3() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+void test_dequeue_freeable_4() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+void test_dequeue_freeable_5() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+void test_dequeue_freeable_6() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+void test_dequeue_freeable_7() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, e, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, f, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, g, STRING_QUEUE);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+/* These tests aim to verify that dequeuing and
+ * enqueueing can be done mixed. */
+int main() {
+    test_dequeue(); 
+    test_dequeue_enqueue_reset();
+    test_dequeue_freeable_1();
+    test_dequeue_freeable_2();
+    test_dequeue_freeable_3();
+    test_dequeue_freeable_4();
+    test_dequeue_freeable_5();
+    test_dequeue_freeable_6();
+    test_dequeue_freeable_7();
+
+    return 0;
+}

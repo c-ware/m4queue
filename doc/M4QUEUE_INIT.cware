@@ -1,0 +1,23 @@
+.TH "M4QUEUE_INIT" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+M4QUEUE_INIT - initialize a new queue
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+\fBdefine(M4QUEUE_INIT);\fR
+.br
+.SH DESCRIPTION
+This will initialize a new queue on the heap. The initial length will be judged
+by M4QUEUE_INITIAL_LENGTH, and must be released from memory using \fBM4QUEUE_FREE\fR(cware)
+
+
+\fI$1\fR will be pointer to the queue to initialize
+.br
+\fI$2\fR will be namespace of the queue
+.br
+.SH EXAMPLES
+For examples, please see the examples section in \fBm4queue\fR(cware)
+.br
+.SH SEE ALSO
+m4queue(cware)

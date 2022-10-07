@@ -1,0 +1,19 @@
+.TH "M4QUEUE_ENQUEUE" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+M4QUEUE_ENQUEUE - add a new item to the queue
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+\fBdefine(M4QUEUE_ENQUEUE);\fR
+.br
+.SH DESCRIPTION
+This will add a new item to the back of the queue. It
+
+
+\fI$1\fR will be pointer to the queue to enqueue into
+.br
+\fI$2\fR will be value to enqueue
+.br
+\fI$3\fR will be namespace of the queue
+.br

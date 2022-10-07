@@ -1,0 +1,55 @@
+/*
+ * Test the is_empty operation
+*/
+
+#include "common.h"
+
+include(template/common.m4)
+
+void test_is_empty() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *e = (char *) malloc(16);
+    char *f = (char *) malloc(16);
+    char *g = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+    strcpy(e, "spam");
+    strcpy(f, "thud");
+    strcpy(g, "eggs");
+
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 1);
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 0);
+
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 0);
+
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 0);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 0);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 0);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+    ASSERT_NUMEQ(M4QUEUE_IS_EMPTY(my_queue), 1);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+int main() {
+    test_is_empty();
+
+    return 0;
+}

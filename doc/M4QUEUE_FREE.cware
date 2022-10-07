@@ -1,0 +1,24 @@
+.TH "M4QUEUE_FREE" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+M4QUEUE_FREE - release a queue and its contents from memory
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+\fBdefine(M4QUEUE_FREE);\fR
+.br
+.SH DESCRIPTION
+This macro will apply a free-macro for each element of the queue, and 
+release the queue itself. The macro that will be called has the suffix
+_FREE.
+
+
+\fI$1\fR will be pointer to the queue to release
+.br
+\fI$2\fR will be the namespace of the queue
+.br
+.SH EXAMPLES
+For examples, please see the examples section in \fBm4queue\fR(cware)
+.br
+.SH SEE ALSO
+m4queue(cware)

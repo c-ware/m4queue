@@ -1,0 +1,95 @@
+/*
+ * Test of the enqueue operation
+*/
+
+#include "common.h"
+
+include(template/common.m4)
+
+void test_enqueue() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->length, 1);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH);
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->length, 2);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH);
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+    ASSERT_STREQ(my_queue->contents[1], "bar");
+
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->length, 3);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH);
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+    ASSERT_STREQ(my_queue->contents[1], "bar");
+    ASSERT_STREQ(my_queue->contents[2], "baz");
+
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->length, 4);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_STREQ(my_queue->contents[0], "foo");
+    ASSERT_STREQ(my_queue->contents[1], "bar");
+    ASSERT_STREQ(my_queue->contents[2], "baz");
+    ASSERT_STREQ(my_queue->contents[3], "tuna");
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+/* Test how the the enqueue operation behaves when there is
+ * data removed from it (non-zero head) */
+void test_enqueue_with_nonzero_head() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+
+    /* Emulate the dequeueing of 2 elements */
+    my_queue->head = 2;
+    my_queue->length = 2;
+
+    /* Re-enqueue a */
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+
+    ASSERT_STREQ(my_queue->contents[0], c);
+    ASSERT_STREQ(my_queue->contents[1], d);
+    ASSERT_STREQ(my_queue->contents[2], "foo");
+    ASSERT_NUMEQ(my_queue->length, 3);
+    ASSERT_NUMEQ(my_queue->head, 0);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+
+int main() {
+    test_enqueue(); 
+    test_enqueue_with_nonzero_head();
+
+    return 0;
+}

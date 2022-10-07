@@ -1,0 +1,63 @@
+@docgen_start
+@type: project
+@name: m4queue-intro
+@brief: a guide to how m4queue works, and how to use it
+
+@include: m4queue/m4queue.m4
+
+@synopsis
+@A table of contents.
+@
+@\BDESCRIPTION\B
+@\R 0.4
+@An introduction to how m4queue works.
+@\R
+@synopsis
+
+@description
+@What separates this queue implementation from the others is that
+@when you pop something off of the front of the queue, rather than
+@shift everything, the "head pointer" will increment.
+@
+@|---|\N
+@| 3 |\N
+@| 2 |\N
+@| 1 | <--- Head pointer\N
+@|---|\N
+@
+@Imagine this queue, where items are enqueued in the order 1 2 3.
+@If we were to dequeue something from it, the value would be removed,
+@but the head pointer will be shifted back.
+@
+@|---|\N
+@| 3 |\N
+@| 2 | <--- Head pointer\N
+@|   |\N
+@|---|\N
+@
+@The head pointer tells the queue where the first item is.  If we do
+@dequeue from it again, then we get:
+@
+@|---|\N
+@| 3 | <--- Head pointer\N
+@|   |\N
+@|   |\N
+@|---|\N
+@
+@Now, if we enqueue to it each item will be "pushed" to the front of
+@the queue, and the head pointer will be reset to the front of the
+@queue. Once that happens, item is added to the back of the queue.
+@
+@|---|\N
+@|   |\N
+@| 4 |\N
+@| 3 | <--- Head pointer\N
+@|---|\N
+@
+@Since adding to the queue pushes everything to the front of the
+@queue, it essentially 'resets' the queue to its initial state.
+@When the length of the queue reaches maximum capacity, then it
+@will be resized.
+@description
+
+@docgen_end

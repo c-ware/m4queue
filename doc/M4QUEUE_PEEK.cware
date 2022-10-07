@@ -1,0 +1,23 @@
+.TH "M4QUEUE_PEEK" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+M4QUEUE_PEEK - get the value at the front of the queue
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+\fBdefine(M4QUEUE_PEEK);\fR
+.br
+.SH DESCRIPTION
+This macro will retrieve the value vat the front of the queue, writing
+it into a variable.
+
+
+\fI$1\fR will be pointer to the queue to release
+.br
+\fI$2\fR will be the variable to put the value into
+.br
+.SH EXAMPLES
+For examples, please see the examples section in \fBm4queue\fR(cware)
+.br
+.SH SEE ALSO
+m4queue(cware)

@@ -1,0 +1,28 @@
+/*
+ * Testing of the initialization operation.
+*/
+
+#include "common.h"
+
+include(template/common.m4)
+
+/* Test the state of the initialized queue */
+void test_init_state() {
+    struct StringQueue *queue = (struct StringQueue *) CWUTILS_NULL;
+
+    queue = M4QUEUE_INIT(queue, STRING_QUEUE);
+
+    ASSERT_PTRNEQ(queue, CWUTILS_NULL);
+    ASSERT_PTRNEQ(queue->contents, CWUTILS_NULL);
+    ASSERT_NUMEQ(queue->head, 0);
+    ASSERT_NUMEQ(queue->length, 0);
+    ASSERT_NUMEQ(queue->capacity, M4QUEUE_INITIAL_LENGTH);
+
+    M4QUEUE_FREE(queue, STRING_QUEUE);
+}
+
+int main() {
+    test_init_state();
+
+    return 0;
+}

@@ -1,0 +1,22 @@
+.TH "M4QUEUE_DECLARE" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+M4QUEUE_DECLARE - declare a new queue structure
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+\fBdefine(M4QUEUE_DECLARE);\fR
+.br
+.SH DESCRIPTION
+This will declare a new queue structure of a certain name.
+
+
+\fI$1\fR will be the name of the structure
+.br
+\fI$2\fR will be the type of the queue
+.br
+.SH EXAMPLES
+For examples, please see the examples section in \fBm4queue\fR(cware)
+.br
+.SH SEE ALSO
+m4queue(cware)

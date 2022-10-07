@@ -1,0 +1,55 @@
+/*
+ * Test of the peek operation
+*/
+
+#include "common.h"
+
+include(template/common.m4)
+
+void test_peek() {
+    char *a = (char *) malloc(16);
+    char *b = (char *) malloc(16);
+    char *c = (char *) malloc(16);
+    char *d = (char *) malloc(16);
+    char *output = CWUTILS_NULL;
+    struct StringQueue *my_queue = M4QUEUE_INIT(my_queue, STRING_QUEUE);
+
+    strcpy(a, "foo");
+    strcpy(b, "bar");
+    strcpy(c, "baz");
+    strcpy(d, "tuna");
+
+    M4QUEUE_ENQUEUE(my_queue, a, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, b, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, c, STRING_QUEUE);
+    M4QUEUE_ENQUEUE(my_queue, d, STRING_QUEUE);
+
+    M4QUEUE_PEEK(my_queue, output);
+    ASSERT_STREQ(output, "foo");
+    ASSERT_NUMEQ(my_queue->length, 4);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_NUMEQ(my_queue->head, 0);
+
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_PEEK(my_queue, output);
+    ASSERT_STREQ(output, "bar");
+    ASSERT_NUMEQ(my_queue->length, 3);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_NUMEQ(my_queue->head, 1);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_PEEK(my_queue, output);
+    ASSERT_STREQ(output, "baz");
+    ASSERT_NUMEQ(my_queue->length, 2);
+    ASSERT_NUMEQ(my_queue->capacity, M4QUEUE_INITIAL_LENGTH * 2);
+    ASSERT_NUMEQ(my_queue->head, 2);
+    M4QUEUE_DEQUEUE(my_queue, output, STRING_QUEUE);
+
+    M4QUEUE_FREE(my_queue, STRING_QUEUE);
+}
+int main() {
+    test_peek(); 
+
+    return 0;
+}

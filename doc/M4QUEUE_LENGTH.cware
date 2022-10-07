@@ -1,0 +1,25 @@
+.TH "M4QUEUE_LENGTH" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+M4QUEUE_LENGTH - determine the length of the queue
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+\fBdefine(M4QUEUE_LENGTH);\fR
+.br
+.SH DESCRIPTION
+This macro will evaluate the length of the queue.
+
+
+\fI$1\fR will be pointer to the queue to release
+.br
+\fI$2\fR will be the variable to put the value into
+.br
+.SH NOTES
+This operation does NOT perform safety checks, even if they are enabled.
+Make sure you perform them yourself.
+.SH EXAMPLES
+For examples, please see the examples section in \fBm4queue\fR(cware)
+.br
+.SH SEE ALSO
+m4queue(cware)

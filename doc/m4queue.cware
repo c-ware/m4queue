@@ -1,0 +1,11 @@
+.TH "m4queue" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.SH NAME
+m4queue - an implementation of a queue in m4
+.SH SYNOPSIS
+include(m4queue/m4queue.m4)
+.br
+
+.SH DESCRIPTION
+An implementation of a queue in m4. This is a rather basic queue
+implementation with an important optimization applied, which is
+the addition of a "head" pointer.
