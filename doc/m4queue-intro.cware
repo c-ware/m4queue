@@ -2,8 +2,6 @@
 .SH NAME
 m4queue-intro - a guide to how m4queue works, and how to use it
 .SH SYNOPSIS
-#include "m4queue/m4queue.m4"
-.br
 A table of contents.
 
 \fBDESCRIPTION\fR
@@ -93,6 +91,7 @@ queue, it essentially 'resets' the queue to its initial state.
 When the length of the queue reaches maximum capacity, then it
 will be resized.
 
+
 .SH  USING M4QUEUE
 One of the more inconvenient parts of using m4queue is its integration with
 \fBliberror\fR(cware). You do not \fBneed\fR to use liberror in m4queue, as if
@@ -103,6 +102,11 @@ This being said, it is still recommended that you use them. So, if you do decide
 to use them, all you need to do is make sure that each file that uses m4queue
 has access to the liberror macros. I would suggest using a "central header" for
 your project, which includes all the other headers.
+
+Other than that, since m4queue is written in m4, you will need to have the m4
+preprocessor on your box. While you most likely do, it might be less work on
+the end of the user for you to \fBpreprocess\fR your C code  with m4 before
+shipping it. Otherwise, you can preprocess it while building.
 
 
 .SH  PROPERTIES

@@ -44,9 +44,9 @@ M4=m4
 CC=cc
 PREFIX=/usr/local
 CFLAGS=-Wall -Wextra -Wpedantic -Wno-unused-but-set-variable -g
-SRCS=tests/length.c tests/enqueue.c tests/free.c tests/addremov.c tests/is_empty.c tests/peek.c tests/init.c tests/dequeue.c  examples/tree/tree.c 
+SRCS=tests/length.c tests/enqueue.c tests/free.c tests/addremov.c tests/is_empty.c tests/peek.c tests/init.c tests/dequeue.c  
 TESTS=tests/length tests/enqueue tests/free tests/addremov tests/is_empty tests/peek tests/init tests/dequeue 
-EXAMPLES=examples/tree/tree 
+EXAMPLES=
 DOCS=doc/M4QUEUE_DEQUEUE.cware doc/m4queue-intro.cware doc/M4QUEUE_PEEK.cware doc/M4QUEUE_INIT.cware doc/M4QUEUE_LENGTH.cware doc/M4QUEUE_DECLARE.cware doc/M4QUEUE_ENQUEUE.cware doc/m4queue-example-tree.cware doc/M4QUEUE_IS_EMPTY.cware doc/m4queue.cware doc/M4QUEUE_FREE.cware 
 
 all: $(SRCS) $(TESTS) $(EXAMPLES)
@@ -103,11 +103,7 @@ tests/dequeue: tests/dequeue.c
 	$(CC) tests/dequeue.c $(CFLAGS) -o tests/dequeue
 
 
-examples/tree/tree.c: examples/tree/tree.m4c 
-	$(M4) examples/tree/tree.m4c > examples/tree/tree.c
 
-examples/tree/tree: examples/tree/tree.c 
-	$(CC) examples/tree/tree.c $(CFLAGS) -o examples/tree/tree
 
 
 
