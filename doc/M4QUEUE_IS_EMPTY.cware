@@ -1,4 +1,4 @@
-.TH "M4QUEUE_IS_EMPTY" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.TH "M4QUEUE_IS_EMPTY" "cware" "Oct 08, 2022" "" "C-Ware Manuals"
 .SH NAME
 M4QUEUE_IS_EMPTY - determine whether or not the array is empty
 .SH SYNOPSIS
@@ -21,6 +21,5 @@ This operation does NOT perform safety checks, even if they are enabled.
 Make sure you perform them yourself.
 .SH EXAMPLES
 For examples, please see the examples section in \fBm4queue\fR(cware)
-.br
 .SH SEE ALSO
 m4queue(cware)

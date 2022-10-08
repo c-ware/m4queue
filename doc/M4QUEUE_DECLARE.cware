@@ -1,4 +1,4 @@
-.TH "M4QUEUE_DECLARE" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.TH "M4QUEUE_DECLARE" "cware" "Oct 08, 2022" "" "C-Ware Manuals"
 .SH NAME
 M4QUEUE_DECLARE - declare a new queue structure
 .SH SYNOPSIS
@@ -17,6 +17,5 @@ This will declare a new queue structure of a certain name.
 .br
 .SH EXAMPLES
 For examples, please see the examples section in \fBm4queue\fR(cware)
-.br
 .SH SEE ALSO
 m4queue(cware)

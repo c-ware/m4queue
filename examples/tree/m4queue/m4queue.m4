@@ -82,14 +82,8 @@ dnl @\T
 dnl @description
 dnl
 dnl @examples
-dnl @m4queue has a couple of examples dedicated to it, showing off some of\\N
-dnl @the more basic operations it provides.\\N
-dnl @
-dnl @\T
-dnl @\S ;
-dnl @\H Manual;Description
-dnl @\E m4queue-example-tree(cware);an example of a tree command
-dnl @\T
+dnl @m4queue has a couple of examples dedicated to it, showing off some of the
+dnl @more basic operations it provides.
 dnl @examples
 dnl
 dnl @reference: cware(cware)

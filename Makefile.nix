@@ -46,7 +46,7 @@ CC=cc
 CFLAGS=
 PREFIX=/usr/local
 TESTS=tests/length tests/enqueue tests/free tests/addremov tests/is_empty tests/peek tests/init tests/dequeue 
-DOCS=doc/M4QUEUE_DEQUEUE.cware doc/m4queue-intro.cware doc/M4QUEUE_PEEK.cware doc/M4QUEUE_INIT.cware doc/M4QUEUE_LENGTH.cware doc/M4QUEUE_DECLARE.cware doc/M4QUEUE_ENQUEUE.cware doc/M4QUEUE_IS_EMPTY.cware doc/m4queue.cware doc/M4QUEUE_FREE.cware 
+DOCS=doc/M4QUEUE_DEQUEUE.cware doc/m4queue-intro.cware doc/M4QUEUE_PEEK.cware doc/M4QUEUE_INIT.cware doc/M4QUEUE_LENGTH.cware doc/M4QUEUE_DECLARE.cware doc/M4QUEUE_ENQUEUE.cware doc/m4queue-example-tree.cware doc/M4QUEUE_IS_EMPTY.cware doc/m4queue.cware doc/M4QUEUE_FREE.cware 
 
 all: $(TESTS)
 

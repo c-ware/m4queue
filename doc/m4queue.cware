@@ -1,4 +1,4 @@
-.TH "m4queue" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.TH "m4queue" "cware" "Oct 08, 2022" "" "C-Ware Manuals"
 .SH NAME
 m4queue - an implementation of a queue in m4
 .SH SYNOPSIS
@@ -47,6 +47,19 @@ M4QUEUE_LENGTH(cware);evaluate to the length of the queue
 M4QUEUE_PEEK(cware);get the front element without removing it
 M4QUEUE_DECLARE(cware);declare a new queue structure
 M4QUEUE_FREE(cware);release the queue from memory
+.TE
+.SH EXAMPLES
+m4queue has a couple of examples dedicated to it, showing off some of\N
+the more basic operations it provides.\N
+
+.TS
+tab(;);
+l l l
+_ _ _
+l l l
+.
+Manual;Description
+m4queue-example-tree(cware);an example of a tree command
 .TE
 .SH SEE ALSO
 cware(cware), m4queue-intro(cware)

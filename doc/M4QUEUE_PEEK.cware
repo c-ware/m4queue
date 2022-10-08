@@ -1,4 +1,4 @@
-.TH "M4QUEUE_PEEK" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.TH "M4QUEUE_PEEK" "cware" "Oct 08, 2022" "" "C-Ware Manuals"
 .SH NAME
 M4QUEUE_PEEK - get the value at the front of the queue
 .SH SYNOPSIS
@@ -18,6 +18,5 @@ it into a variable.
 .br
 .SH EXAMPLES
 For examples, please see the examples section in \fBm4queue\fR(cware)
-.br
 .SH SEE ALSO
 m4queue(cware)

@@ -1,4 +1,4 @@
-.TH "M4QUEUE_DEQUEUE" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.TH "M4QUEUE_DEQUEUE" "cware" "Oct 08, 2022" "" "C-Ware Manuals"
 .SH NAME
 M4QUEUE_DEQUEUE - add a new item to the queue
 .SH SYNOPSIS

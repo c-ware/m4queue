@@ -1,4 +1,4 @@
-.TH "M4QUEUE_INIT" "cware" "Oct 07, 2022" "" "C-Ware Manuals"
+.TH "M4QUEUE_INIT" "cware" "Oct 08, 2022" "" "C-Ware Manuals"
 .SH NAME
 M4QUEUE_INIT - initialize a new queue
 .SH SYNOPSIS
@@ -18,6 +18,5 @@ by M4QUEUE_INITIAL_LENGTH, and must be released from memory using \fBM4QUEUE_FRE
 .br
 .SH EXAMPLES
 For examples, please see the examples section in \fBm4queue\fR(cware)
-.br
 .SH SEE ALSO
 m4queue(cware)
