@@ -9,3 +9,44 @@ include(m4queue/m4queue.m4)
 An implementation of a queue in m4. This is a rather basic queue
 implementation with an important optimization applied, which is
 the addition of a "head" pointer.
+
+The queue provides all basic operations one might expect from a
+queue, like dequeueing, enqueueing, and peeking. It is type safe,
+and highly portable. It has shown to compile on the following
+operating systems, including those with K&R compilers!
+   - FreeBSD 13.1
+   - NetBSD 9.3
+   - OpenBSD 7.1
+   - OpenSolaris 10
+   - ULTRIX 4.5
+   - QuasijarusBSD 4.3
+   - OS/2 4.52 Warp
+   - DragonflyBSD 6.2.1
+   - NeXTSTEP 4.2
+   - UNIXWare 7.1.4
+
+Since this is an \fBm4\fR(cware) implementation, it is recommended that
+you \fIpreprocess\fR your code with m4 \fBbefore\fR shipping it, which will
+also allow your code to be more portable, since not all operating systems
+have an m4 implementation. For a larger introduction into how m4queue works,
+and how to use it, please see \fBm4queue-intro\fR.
+
+\fBList of operations\fR
+.TS
+tab(;);
+l l l
+_ _ _
+l l l
+.
+Manual;Description
+M4QUEUE_INIT(cware);initialize a new queue
+M4QUEUE_ENQUEUE(cware);add to the queue
+M4QUEUE_DEQUEUE(cware);remove the front element of the queue
+M4QUEUE_IS_EMPTY(cware);determine if the queue is empty
+M4QUEUE_LENGTH(cware);evaluate to the length of the queue
+M4QUEUE_PEEK(cware);get the front element without removing it
+M4QUEUE_DECLARE(cware);declare a new queue structure
+M4QUEUE_FREE(cware);release the queue from memory
+.TE
+.SH SEE ALSO
+cware(cware), m4queue-intro(cware)

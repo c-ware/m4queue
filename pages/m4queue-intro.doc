@@ -12,6 +12,19 @@
 @\R 0.4
 @An introduction to how m4queue works.
 @\R
+@\BUSING M4QUEUE\B
+@\R 0.4
+@Basic guide to using m4queue in your project.
+@\R
+@\BPROPERTIES\B
+@\R 0.4
+@An introduction to data structure properties, how to use them, what ones are
+@available, etc.
+@\R
+@\BCOMPILATION NOTES\B
+@\R 0.4
+@Notes about compiling on stranger operating systems like ULTRIX and QuasiBSD.
+@\R
 @synopsis
 
 @description
@@ -58,6 +71,79 @@
 @queue, it essentially 'resets' the queue to its initial state.
 @When the length of the queue reaches maximum capacity, then it
 @will be resized.
+@\M USING M4QUEUE
+@One of the more inconvenient parts of using m4queue is its integration with
+@\Bliberror\B(cware). You do not \Bneed\B to use liberror in m4queue, as if
+@\BLIBERROR_ENABLED\B is not defined, it will not attempt to expand the safety
+@check macros, like out of bounds checks.
+@
+@This being said, it is still recommended that you use them. So, if you do decide
+@to use them, all you need to do is make sure that each file that uses m4queue
+@has access to the liberror macros. I would suggest using a "central header" for
+@your project, which includes all the other headers.
+@
+@\M PROPERTIES
+@Explanations aside, the one truly defining feature of the \Bm4\B(1) data structure
+@implementations is how they store information. The C-Ware data structures, along with
+@m4queue, use a namespacing system with other macros to hold information about a given
+@data structure. Most of the m4queue operations will take a \Inamespace\I argument,
+@which is used to access information about that data structure. As an example, say you
+@had an queue of heap-allocated strings, which should all be released from memory when
+@the queue is released. If we wanted to \Binitialize\B, and \Bfree\B the queue, we would
+@need to define a collections of macros which end in the suffixes \B_TYPE\B, \B_NAME\B,
+@and \B_FREE\B respectively.
+@
+@define(`STRING_QUEUE_TYPE', `char *')\N
+@define(`STRING_QUEUE_NAME', `struct StringQueue')\N
+@define(`STRING_QUEUE_FREE', `free($1)')\N
+@
+@In this case, \ISTRING_QUEUE\I is our namespace. Any macro which might need access to this
+@information can just be passed the namespace as an argument, and be on its way. This is how
+@all the operations in m4queue access external information, if they need it. That being said,
+@these macros are for each \Btype\B of data structure. If you wanted to instantiate multiple
+@queues of strings, you can use the same namespace. You only need to use other namespaces if
+@you are working with other types, and can easily just switch out the namespace for other types
+@if needed.
+@
+@The information stored in macros are usually referred to as data structure properties, or
+@just properties. Here is a list of each property, and a description of it. Do note, you
+@do not need to define \Ievery\I macro-- only the ones you need to use. If you use an
+@operation, check the notes section of its manual page for what macros it uses.
+@
+@\B_TYPE\B\N
+@\R 0.4
+@This property stores the type of data stored in the queue. For example, if you wanted
+@to store an queue of pointers to integers, \Bint *\B would be stored. Or, if you wanted
+@an queue of structures named \BMyStruct\B, you could have the type of \Bstruct MyStruct\B.
+@\R
+@
+@\B_NAME\B\N
+@\R 0.4
+@This property stores the type of the queue. For example, if you had an queue structure
+@declared as \BMyArray\B, you would set this property to \Bstruct MyArray\B, or if it was
+@declared with a typedef, just \BMyArray\B.
+@\R
+@
+@\B_FREE\B
+@\R 0.4
+@This property is a 'callback' macro that describes how an element of the queue should be
+@released from memory. The first argument is the value to release from memory. For example,
+@if you had an queue of heap-allocated strings, and you wanted to to release them from memory,
+@you could define the queue as \Bfree($1)\B, which will invoke the \Bfree\B(3) function over
+@an element of the queue.
+@\R
+@
+@\M COMPILATION NOTES
+@Some of the operating systems that m4queue will compile under need a specific macro
+@defined for the code to be compiled correctly on that operating system. If you are
+@targeting any of the following operating systems, please define the corresponding
+@macro to make sure m4queue knows what operating system it is on.
+@\T
+@\S ;
+@\H Operating System;Macro
+@\E ULTRIX;__ULTRIX__
+@\E QuasiBSD;__QuasiBSD__
+@\T
 @description
 
 @docgen_end

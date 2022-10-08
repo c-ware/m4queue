@@ -44,7 +44,48 @@ dnl @description
 dnl @An implementation of a queue in m4. This is a rather basic queue
 dnl @implementation with an important optimization applied, which is
 dnl @the addition of a "head" pointer.
+dnl @
+dnl @The queue provides all basic operations one might expect from a
+dnl @queue, like dequeueing, enqueueing, and peeking. It is type safe,
+dnl @and highly portable. It has shown to compile on the following
+dnl @operating systems, including those with K&R compilers!
+dnl @   - FreeBSD 13.1
+dnl @   - NetBSD 9.3
+dnl @   - OpenBSD 7.1
+dnl @   - OpenSolaris 10
+dnl @   - ULTRIX 4.5
+dnl @   - QuasijarusBSD 4.3
+dnl @   - OS/2 4.52 Warp
+dnl @   - DragonflyBSD 6.2.1
+dnl @   - NeXTSTEP 4.2
+dnl @   - UNIXWare 7.1.4
+dnl @
+dnl @Since this is an \Bm4\B(cware) implementation, it is recommended that
+dnl @you \Ipreprocess\I your code with m4 \Bbefore\B shipping it, which will
+dnl @also allow your code to be more portable, since not all operating systems
+dnl @have an m4 implementation. For a larger introduction into how m4queue works,
+dnl @and how to use it, please see \Bm4queue-intro\B.
+dnl @
+dnl @\BList of operations\B
+dnl @\T
+dnl @\S ;
+dnl @\H Manual;Description
+dnl @\E M4QUEUE_INIT(cware);initialize a new queue
+dnl @\E M4QUEUE_ENQUEUE(cware);add to the queue
+dnl @\E M4QUEUE_DEQUEUE(cware);remove the front element of the queue
+dnl @\E M4QUEUE_IS_EMPTY(cware);determine if the queue is empty
+dnl @\E M4QUEUE_LENGTH(cware);evaluate to the length of the queue
+dnl @\E M4QUEUE_PEEK(cware);get the front element without removing it
+dnl @\E M4QUEUE_DECLARE(cware);declare a new queue structure
+dnl @\E M4QUEUE_FREE(cware);release the queue from memory
+dnl @\T
 dnl @description
+dnl
+dnl @examples
+dnl @examples
+dnl
+dnl @reference: cware(cware)
+dnl @reference: m4queue-intro(cware)
 dnl
 dnl @docgen_end
 
